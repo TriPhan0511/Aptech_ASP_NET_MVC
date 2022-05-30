@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Students";
+}
+
+<h2>List of all students</h2>
+@*<ul>
+        @for (int i = 0; i < ViewBag.Students.Count; i++)
+        {
+            var student = ViewBag.Students[i];
+            var details =
+                $"Id = {student.Id}, Name = {student.Name}, Age = {student.Age}, " +
+                $"Phone = {student.Phone}, Math Mark = {student.MathMark}, Literature Mark = {student.LiteratureMark}, " +
+                $"Average Mark = {student.AvgMark()}";
+
+            <li>@details</li>
+        }
+    </ul>*@
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Phone Number</th>
+        <th>Math Mark</th>
+        <th>Literature Mark</th>
+        <th>Average Mark</th>
+    </tr>
+    @foreach (var student in ViewBag.Students)
+    {
+        <tr>
+            <td>@student.Id</td>
+            <td>@student.Name</td>
+            <td>@student.Age</td>
+            <td>@student.Phone</td>
+            <td>@student.MathMark</td>
+            <td>@student.LiteratureMark</td>
+            <td>@student.AvgMark()</td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = student.Id }) |
+                @Html.ActionLink("Edit", "Edit", new { id = student.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = student.Id })
+            </td>
+        </tr>
+    }
+</table>

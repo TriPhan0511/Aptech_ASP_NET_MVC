@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@* Testing *@
+<p>@ViewBag.Message</p>
+
+@*@{ 
+    var s = ViewBag.FoundStudent;
+    if (s == null)
+    {
+        <p>Not found</p>
+    }
+    else
+    {
+        var details =
+                $"Id = {s.Id}, Name = {s.Name}, Age = {s.Age}, " +
+                $"Phone = {s.Phone}, Math Mark = {s.MathMark}, Literature Mark = {s.LiteratureMark}, " +
+                $"Average Mark = {s.AvgMark()}";
+        <p>@details</p>
+    }
+}*@
