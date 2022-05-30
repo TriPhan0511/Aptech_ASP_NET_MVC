@@ -1,0 +1,26 @@
+﻿
+@model Sesion_04_DIY.Models.User
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(Model => Model.Id)
+    @Html.TextBoxFor(Model => Model.Id)
+    <br />
+    @Html.LabelFor(Model => Model.Username)
+    @Html.TextBoxFor(Model => Model.Username)
+    <br />
+    @Html.LabelFor(Model => Model.Fullname)
+    @Html.TextBoxFor(Model => Model.Fullname)
+    <br />
+    @Html.LabelFor(Model => Model.Password)
+    @Html.TextBoxFor(Model => Model.Password)
+    <br />
+    <input type="submit" value="Add new" />
+}
+

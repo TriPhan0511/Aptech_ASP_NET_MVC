@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@{ 
+    var names = new string[] { "a", "b" };
+}
+
+<h2>Index</h2>
+<ul>
+    @for (int i = 0; i < names.Length; i++)
+    {
+        <li>@names[i]</li>
+    }
+</ul>
+

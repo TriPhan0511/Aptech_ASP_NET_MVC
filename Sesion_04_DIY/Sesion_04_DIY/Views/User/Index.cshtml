@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Sesion_04_DIY.Models.User>
+
+@{ 
+    ViewBag.Title = "Index";
+    TempData["user"] = Model;
+}
+
+<h2>Index</h2>
+@Html.ActionLink("Add a new user", "Create")
+
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Fullname</th>
+        <th>Password</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Username</td>
+            <td>@item.Fullname</td>
+            <td>@item.Password</td>
+        </tr>
+    }
+</table>
