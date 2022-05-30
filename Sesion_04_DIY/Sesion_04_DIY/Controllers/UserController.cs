@@ -45,7 +45,7 @@ namespace Sesion_04_DIY.Controllers
                 if (user != null)
                 {
                     users.Add(user);
-                    TempData["users"] = user;
+                    TempData["users"] = users;
                     return RedirectToAction("Index");
                 }
             }
