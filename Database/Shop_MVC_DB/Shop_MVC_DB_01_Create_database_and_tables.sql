@@ -1,0 +1,112 @@
+USE master
+GO
+
+DROP DATABASE IF EXISTS Shop_MVC_DB
+GO
+
+CREATE DATABASE Shop_MVC_DB
+GO
+
+USE Shop_MVC_DB
+GO
+
+CREATE TABLE Categories
+(
+	Id INT IDENTITY (1,1) PRIMARY KEY NOT NULL,
+	[Name] NVARCHAR (50) NOT NULL,
+	[Description] NVARCHAR (500) NULL
+	CONSTRAINT unique_category_name UNIQUE ([Name])
+)
+
+CREATE TABLE Suppliers
+(
+	Id INT IDENTITY (1,1) PRIMARY KEY NOT NULL,
+	[Name] NVARCHAR (100) NOT NULL,
+	Email VARCHAR (50) NOT NULL,
+	PhoneNumber VARCHAR (50) NULL,
+	[Address] NVARCHAR (500) NOT NULL,
+	CONSTRAINT unique_supplier_email UNIQUE (Email)
+)
+
+CREATE TABLE Customers
+(
+	Id VARCHAR (50) PRIMARY KEY NOT NULL, -- Login Id / UserName
+	FirstName NVARCHAR (50) NOT NULL,
+	LastName NVARCHAR (50) NOT NULL,
+	PhoneNumber VARCHAR (50) NULL,
+	[Address] NVARCHAR (500) NOT NULL,
+	Email VARCHAR (50) NOT NULL,
+	Birthday DATETIME NULL,
+	CONSTRAINT unique_customer_email UNIQUE (Email)
+)
+
+CREATE TABLE Employees
+(
+	Id VARCHAR (50) PRIMARY KEY NOT NULL, -- Login Id / UserName
+	FirstName NVARCHAR (50) NOT NULL,
+	LastName NVARCHAR (50) NOT NULL,
+	PhoneNumber VARCHAR (50) NULL,
+	[Address] NVARCHAR (500) NOT NULL,
+	Email VARCHAR (50) NOT NULL,
+	Birthday DATETIME NULL,
+	CONSTRAINT unique_employee_email UNIQUE (Email)
+)
+
+CREATE TABLE Products
+(
+	Id INT IDENTITY (1,1) PRIMARY KEY NOT NULL,
+	[Name] NVARCHAR (50) NOT NULL,
+	Price MONEY NOT NULL DEFAULT 0,
+	Discount DECIMAL (18,2) NOT NULL DEFAULT 0,
+	Stock DECIMAL (18,2) NOT NULL DEFAULT 0,
+	CategoryId INT NOT NULL,
+	SupplierId INT NOT NULL,
+	[Description] NVARCHAR (MAX) NOT NULL,
+	CONSTRAINT fk_products_categories FOREIGN KEY (CategoryId)
+		REFERENCES Categories (Id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+	CONSTRAINT fk_products_suppliers FOREIGN KEY (SupplierId)
+		REFERENCES Suppliers (Id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+	CONSTRAINT chk_product_price CHECK (Price >= 0),
+	CONSTRAINT chk_product_discount CHECK (Discount BETWEEN 0 AND 100)
+)
+
+CREATE TABLE Orders
+(
+	Id INT IDENTITY (1,1) PRIMARY KEY NOT NULL,
+	CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),
+	ShippedDate DATETIME NULL,
+	[Status] VARCHAR (50) NOT NULL DEFAULT 'WAITING', -- WAITING / COMPLETED /CANCELED
+	[Description] NVARCHAR (MAX) NULL,
+	ShippingAddress NVARCHAR (500) NOT NULL,
+	ShippingCity NVARCHAR (50) NOT NULL,
+	PaymentType VARCHAR (20) NOT NULL DEFAULT 'CASH', -- CASH / CREDIT CARD
+	CustomerId VARCHAR (50) NOT NULL,
+	EmployeeId VARCHAR (50) NOT NULL,
+	CONSTRAINT fk_orders_customers FOREIGN KEY (CustomerId) REFERENCES Customers (Id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+	CONSTRAINT fk_orders_employees FOREIGN KEY (EmployeeId) REFERENCES Employees (Id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+	CONSTRAINT chk_order_createddate_shippeddate CHECK (ShippedDate >= CreatedDate),
+	CONSTRAINT chk_order_status CHECK  ([Status] IN ('WAITING', 'COMPLETED', 'CANCELED')),
+	CONSTRAINT chk_order_paymenttype CHECK  (PaymentType IN ('CASH', 'CREDIT CARD'))
+)
+
+CREATE TABLE OrderDetails
+(
+	Id INT IDENTITY (1,1) PRIMARY KEY NOT NULL,
+	OrderId INT NOT NULL,
+	ProductId INT NOT NULL,
+	Quantity DECIMAL (18,2) NOT NULL,
+	CONSTRAINT fk_orderdetails_orders FOREIGN KEY (OrderId) REFERENCES Orders (Id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+	CONSTRAINT fk_orderdetails_products FOREIGN KEY (ProductId) REFERENCES Products (Id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+)
